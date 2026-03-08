@@ -8,6 +8,8 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.12"
 pre-commit = "^4.5.1"
+pydantic = "^2.12.5"
+pytest = "^9.0.2"
 
 
 [build-system]
