@@ -16,12 +16,12 @@ def test_orders_with_valid_data():
         "order_value": 100.50,
         "product": "ABC",
         "quantity": 4,
-        "category": "category1",
+        "category": "Books",
     }
 
     order = Orders(**valid_data)
 
-    assert order.email == valid_data["customer_email"]
+    assert order.customer_email == valid_data["customer_email"]
     assert order.order_date == valid_data["order_date"]
     assert order.order_value == valid_data["order_value"]
     assert order.product == valid_data["product"]
@@ -41,7 +41,7 @@ def test_orders_with_invalid_data():
         "order_value": -100,
         "product": "",
         "quantity": -2,
-        "category": "category78",
+        "category": "Electronics",
     }
 
     with pytest.raises(ValidationError):
@@ -60,7 +60,7 @@ def test_category_validation():
         "order_value": 100.50,
         "product": "ABCD",
         "quantity": 4,
-        "category": "random category",
+        "category": "Notebooks",
     }
 
     with pytest.raises(ValidationError):
