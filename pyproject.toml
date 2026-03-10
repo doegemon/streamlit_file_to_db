@@ -11,8 +11,18 @@ pre-commit = "^4.5.1"
 pydantic = "^2.12.5"
 pytest = "^9.0.2"
 email-validator = "^2.3.0"
+streamlit = "^1.55.0"
+selenium = "^4.41.0"
+webdriver-manager = "^4.0.2"
+taskipy = "^1.14.1"
+openpyxl = "^3.1.5"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.taskipy.tasks]
+run = "lsof -ti :8501 | xargs kill -9 | poetry run streamlit run app/app.py"
+test = "lsof -ti :8501 | xargs kill -9 | pytest tests -v"
