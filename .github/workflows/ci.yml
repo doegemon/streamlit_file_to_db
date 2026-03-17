@@ -15,8 +15,12 @@ jobs:
         with:
           python-version: "3.12.7"
 
-      - name: Install Firefox
-        uses: browser-actions/setup-firefox@v1
+      - name: Install Chrome
+        id: setup-chrome
+        uses: browser-actions/setup-chrome@v2
+        with:
+          install-chromedriver: true
+          install-dependencies: true
 
       - name: Install Poetry
         run: |
@@ -27,4 +31,7 @@ jobs:
         run: poetry install --no-interaction
 
       - name: Run Tests
+        env:
+          CHROME_BIN: ${{ steps.setup-chrome.outputs.chrome-path }}
+          CHROMEDRIVER: ${{ steps.setup-chrome.outputs.chromedriver-path }}
         run: poetry run pytest

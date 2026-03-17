@@ -1,11 +1,13 @@
+import os
 import pytest
 import subprocess
 from time import sleep, time
 from urllib.error import URLError
 from urllib.request import urlopen
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
-from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 
 
@@ -28,7 +30,7 @@ def wait_for_app(url, timeout=20):
 
 @pytest.fixture
 def driver():
-    """Start the app and return a headless Firefox WebDriver."""
+    """Start the app and return a headless Chrome WebDriver."""
     process = subprocess.Popen(
         [
             "poetry",
@@ -40,8 +42,20 @@ def driver():
         ]
     )
     options = Options()
-    options.headless = True
-    browser = webdriver.Firefox(options=options)
+    options.add_argument("--headless=new")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--window-size=1440,900")
+
+    chrome_binary = os.environ.get("CHROME_BIN")
+    if chrome_binary:
+        options.binary_location = chrome_binary
+
+    chromedriver_path = os.environ.get("CHROMEDRIVER")
+    service = (
+        Service(executable_path=chromedriver_path) if chromedriver_path else Service()
+    )
+    browser = webdriver.Chrome(service=service, options=options)
     browser.set_page_load_timeout(10)
 
     try:
